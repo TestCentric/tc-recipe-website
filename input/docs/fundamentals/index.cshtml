@@ -1,0 +1,14 @@
+Title: Fundamentals
+Description: Seting up your project to use the recipe
+Order: 3
+---
+@foreach (IDocument child in Model.GetChildren().OrderBy(x => x.Get<int>(Keys.Order, 1000)))
+{
+    <h2>@(child.GetString(Keys.Title))</h2>
+    if (child.ContainsKey("Description"))
+    {
+        <p>@Html.Raw(child.GetString("Description"))</p>
+    }
+
+    @Html.Partial("_ChildPages", child)
+}

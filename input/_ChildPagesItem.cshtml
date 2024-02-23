@@ -1,0 +1,36 @@
+﻿@* Override in your own input directory to customize the appearance of items in the child pages list *@
+@* The document for the child page is passed in as the model *@
+
+@{
+    string description = Model.GetString("Description");
+    <div class="p-3 mb-2 bg-light page-box">
+        <h2>@Html.DocumentLink(Model)</h2>
+
+        @if (!string.IsNullOrEmpty(description))
+        {
+            <div class="font-size-sm">@Html.Raw(description)</div>
+        }
+
+        @{
+            DocumentList<IDocument> children = OutputPages
+                .GetChildrenOf(Model)
+                .Where(x => !x.ContainsKey(Keys.RedirectTo))
+                .ToDocumentList();
+            if (!Model.GetBool("NoChildPages") && children.Count > 0)
+            {
+                <table style="margin: 0 2em">
+                @foreach (IDocument child in children)
+                {
+                    <tr>
+                    <th>@Html.DocumentLink(child)</th>
+                    @if (child.ContainsKey("Description"))
+                    {
+                        <td style="padding: 0 2em">@Html.Raw(child.GetString("Description"))</td>
+                    }
+                    </tr>
+                }
+                </table>
+            }
+        }
+    </div>
+}

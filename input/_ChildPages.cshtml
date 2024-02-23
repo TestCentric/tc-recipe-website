@@ -1,0 +1,15 @@
+@{
+    DocumentList<IDocument> children = OutputPages
+        .GetChildrenOf(Document)
+        .Where(x => !x.ContainsKey(Keys.RedirectTo))
+        .ToDocumentList();
+    @if (!Document.GetBool("NoChildPages") && children.Count > 0)
+    {
+        @foreach (IDocument child in children)
+        {
+            <div>
+                @await Html.PartialAsync("_ChildPagesItem", child)
+            </div>
+        }
+    }
+}
